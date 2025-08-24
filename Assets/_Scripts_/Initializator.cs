@@ -22,7 +22,6 @@ public class Initializator : MonoBehaviour
             playerName = nameInput.text;
         }
 
-        // Try to connect to localhost
         NetworkManager manager = NetworkManager.singleton;
         manager.networkAddress = "localhost";
         nameInput.gameObject.SetActive(false);
@@ -34,20 +33,18 @@ public class Initializator : MonoBehaviour
     {
         manager.StartClient();
 
-        float timer = 3f; // wait 3 seconds for connection
+        float timer = 3f; 
         while (timer > 0f && !NetworkClient.isConnected && !NetworkServer.active)
         {
             timer -= Time.deltaTime;
             yield return null;
         }
 
-        // If failed to connect, start as host
         if (!NetworkClient.isConnected && !NetworkServer.active)
         {
             manager.StartHost();
         }
 
-        // Save player name so Player prefab can read it
         Player.localPlayerName = playerName;
     }
 }

@@ -10,7 +10,7 @@ public class Player : NetworkBehaviour
     CamFollow follower;
 
     [SerializeField] TMP_Text nameDisplay;
-    [SerializeField] GameObject cubePrefab; // assign in Inspector
+    [SerializeField] GameObject cubePrefab; 
 
     [SyncVar(hook = nameof(OnNameChanged))]
     public string playerName;
@@ -38,13 +38,11 @@ public class Player : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // Tell server to broadcast a message
             CmdSendMessage("Player " + playerName + " pressed SPACE!");
         }
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            // Tell server to spawn a cube
             CmdSpawnCube();
         }
     }
@@ -62,7 +60,6 @@ public class Player : NetworkBehaviour
         playerName = newName;
     }
 
-    // === Space key handling ===
     [Command]
     void CmdSendMessage(string msg)
     {
@@ -75,15 +72,13 @@ public class Player : NetworkBehaviour
         Debug.Log(msg);
     }
 
-    // === Cube spawning ===
     [Command]
     void CmdSpawnCube()
     {
         GameObject cube = Instantiate(cubePrefab, transform.position + transform.forward * 2f, Quaternion.identity);
         NetworkServer.Spawn(cube);
     }
-
-    // Runs on clients whenever playerName changes
+    
     void OnNameChanged(string oldName, string newName)
     {
         nameDisplay.text = newName;
